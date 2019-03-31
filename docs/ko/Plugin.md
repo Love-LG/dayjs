@@ -44,6 +44,52 @@ dayjs.extend(AdvancedFormat) // use plugin
 
 ## List of official plugins
 
+### UTC
+
+- UTC adds `.utc` `.local` `.isUTC` APIs to parse or display in UTC.
+
+```javascript
+import utc from 'dayjs/plugin/utc'
+
+dayjs.extend(utc)
+
+// default local time
+dayjs().format() //2019-03-06T17:11:55+08:00
+// UTC mode
+dayjs.utc().format() // 2019-03-06T09:11:55Z
+dayjs()
+  .utc()
+  .format() // 2019-03-06T09:11:55Z
+// While in UTC mode, all display methods will display in UTC time instead of local time.
+// And all getters and setters will internally use the Date#getUTC* and Date#setUTC* methods instead of the Date#get* and Date#set* methods.
+dayjs.utc().isUTC() // true
+dayjs
+  .utc()
+  .local()
+  .format() //2019-03-06T17:11:55+08:00
+dayjs.utc('2018-01-01', 'YYYY-MM-DD') // with CustomParseFormat plugin
+```
+
+By default, Day.js parses and displays in local time.
+
+If you want to parse or display in UTC, you can use `dayjs.utc()` instead of `dayjs()`.
+
+#### dayjs.utc `dayjs.utc(dateType?: string | number | Date | Dayjs, format? string)`
+
+Returns a `Dayjs` object in UTC mode.
+
+#### Use UTC time `.utc()`
+
+Returns a cloned `Dayjs` object with a flag to use UTC time.
+
+#### Use local time `.local()`
+
+Returns a cloned `Dayjs` object with a flag to use local time.
+
+#### isUTC mode `.isUTC()`
+
+Returns a `boolean` indicating current `Dayjs` object is in UTC mode or not.
+
 ### AdvancedFormat
 
 - AdvancedFormat은 더 많은 형식 옵션을 제공하기위해 `dayjs().format` API를 확장합니다.
@@ -239,7 +285,7 @@ dayjs('2018-06-27').week(5) // set week
 
 ### QuarterOfYear
 
-- QuarterOfYear add `.quarter()` API to return to which quarter of the year belongs a date
+- QuarterOfYear add `.quarter()` API to return to which quarter of the year belongs a date, and extends `.add` `.subtract` `.startOf` `.endOf` APIs to support unit `quarter`.
 
 ```javascript
 import quarterOfYear from 'dayjs/plugin/quarterOfYear'
@@ -247,6 +293,7 @@ import quarterOfYear from 'dayjs/plugin/quarterOfYear'
 dayjs.extend(quarterOfYear)
 
 dayjs('2010-04-01').quarter() // 2
+dayjs('2010-04-01').quarter(2)
 ```
 
 ### CustomParseFormat
@@ -294,6 +341,38 @@ dayjs('2018 5월 15', 'YYYY MMMM DD', 'ko')
 | `ZZ`   | -0500            | Compact offset from UTC, 2-digits |
 | `A`    | AM PM            | Post or ante meridiem, upper-case |
 | `a`    | am pm            | Post or ante meridiem, lower-case |
+| `Do`   | 1st... 31st      | 서수형식의 일자 명                |
+
+### ToArray
+
+- ToArray add `.toArray()` API to return an `array` that mirrors the parameters
+
+```javascript
+import toArray from 'dayjs/plugin/toArray'
+
+dayjs.extend(toArray)
+
+dayjs('2019-01-25').toArray() // [ 2019, 0, 25, 0, 0, 0, 0 ]
+```
+
+### ToObject
+
+- ToObject add `.toObject()` API to return an `object` with the date's properties.
+
+```javascript
+import toObject from 'dayjs/plugin/toObject'
+
+dayjs.extend(toObject)
+
+dayjs('2019-01-25').toObject()
+/* { years: 2019,
+     months: 0,
+     date: 25,
+     hours: 0,
+     minutes: 0,
+     seconds: 0,
+     milliseconds: 0 } */
+```
 
 ## Customize
 
